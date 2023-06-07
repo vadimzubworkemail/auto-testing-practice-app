@@ -7,6 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 
 public class UserInput {
-    private String login;
+    private String u_login;
     private String email;
 }
