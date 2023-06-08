@@ -1,4 +1,4 @@
-package com.example.autotestingpracticeapp.rest;
+package com.example.autotestingpracticeapp.http_client;
 
 import com.example.autotestingpracticeapp.model_pojo.UserInput;
 import io.restassured.response.ValidatableResponse;

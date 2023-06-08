@@ -2,7 +2,7 @@ package com.example.autotestingpracticeapp.api_test;
 
 import com.example.autotestingpracticeapp.model_pojo.User;
 import com.example.autotestingpracticeapp.model_pojo.UserInput;
-import com.example.autotestingpracticeapp.rest.UserHTTPRequests;
+import com.example.autotestingpracticeapp.http_client.UserHTTPRequests;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
