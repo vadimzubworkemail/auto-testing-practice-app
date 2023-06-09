@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 
-public class UserHTTPRequests extends BaseSpec {
+public class UserHTTPRequests extends BaseHTTPClient {
 
     public ValidatableResponse getUsersList() {
         return given().spec(getBaseSpec()).when().get(EndPoints.userEndPoint).then();

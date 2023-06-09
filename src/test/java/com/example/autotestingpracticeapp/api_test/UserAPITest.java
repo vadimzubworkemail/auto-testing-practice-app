@@ -1,8 +1,8 @@
 package com.example.autotestingpracticeapp.api_test;
 
+import com.example.autotestingpracticeapp.http_client.UserHTTPRequests;
 import com.example.autotestingpracticeapp.model_pojo.User;
 import com.example.autotestingpracticeapp.model_pojo.UserInput;
-import com.example.autotestingpracticeapp.http_client.UserHTTPRequests;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +22,7 @@ public class UserAPITest {
     UUID id;
 
     @BeforeEach
-    public void setRequests() {
+    public void setUp() {
         requests = new UserHTTPRequests();
     }
 
@@ -57,13 +57,15 @@ public class UserAPITest {
         String login = jsonPath.getList("u_login").get(index).toString();
         String email = jsonPath.getList("email").get(index).toString();
 
-        Response request = requests.getUserById(id).assertThat().statusCode(200)
+        Response actualResponse = requests.getUserById(id).assertThat().statusCode(200)
                 .log().all().extract().response();
-        JsonPath actualData = request.jsonPath();
+        JsonPath actualData = actualResponse.jsonPath();
 
         assertThat(id).isEqualTo(UUID.fromString(actualData.get("id").toString()));
         assertThat(login).isEqualTo(actualData.get("u_login"));
         assertThat(email).isEqualTo(actualData.get("email"));
+
+
     }
 
     @Test
@@ -88,6 +90,15 @@ public class UserAPITest {
                 .extract().body().as(User.class);
         UUID id = UUID.fromString(user.getId().toString());
         requests.deleteUser(id);
+
+        Response response = requests.getUsersList()
+                .assertThat().statusCode(200)
+                .log().all()
+                .extract().response();
+        JsonPath jsonPath = response.jsonPath();
+        List<UUID> uuids = jsonPath.getList("id");
+
+        assertThat(uuids).doesNotContain(id);
     }
 
     @Test
