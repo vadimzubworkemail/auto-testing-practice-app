@@ -10,7 +10,23 @@ import io.restassured.http.ContentType;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.specification.RequestSpecification;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 public class BaseHTTPClient {
+
+    final String configPath = "src/main/resources/integration-app.properties";
+
+    private Properties getAppProperties() {
+        final Properties appProperties = new Properties();
+        try {
+            appProperties.load(new FileInputStream(configPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return appProperties;
+    }
 
     private final RestAssuredConfig config = RestAssuredConfig.newConfig()
             .sslConfig(new SSLConfig().relaxedHTTPSValidation())
@@ -18,7 +34,7 @@ public class BaseHTTPClient {
             .objectMapperConfig(new ObjectMapperConfig(ObjectMapperType.GSON));
 
     private String getBaseHost() {
-        String baseHost = System.getProperty("server.host");
+        String baseHost = getAppProperties().getProperty("server.host");
         if (baseHost == null) {
             return RestAssured.DEFAULT_URI;
         } else {
@@ -27,7 +43,7 @@ public class BaseHTTPClient {
     }
 
     private Integer getBasePort() {
-        String basePort = System.getProperty("server.port");
+        String basePort = getAppProperties().getProperty("server.port");
         if (basePort == null) {
             return RestAssured.DEFAULT_PORT;
         } else {
